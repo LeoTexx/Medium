@@ -11,7 +11,7 @@ interface Props {
 
 export default function Home({ posts }: Props) {
   return (
-    <main className="max-w-8xl mx-auto">
+    <main className="mx-auto max-w-7xl">
       <Head>
         <title>Medium Blog | Made By Leo</title>t
       </Head>

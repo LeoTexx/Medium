@@ -15,6 +15,7 @@
 # medium
 
 /medium/node_modules
+/medium/dist
 
 # production
 /build

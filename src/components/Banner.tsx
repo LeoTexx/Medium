@@ -1,6 +1,6 @@
 export function Banner() {
   return (
-    <section className="flex items-center justify-between border-y border-black bg-yellow-400 py-10 lg:py-0">
+    <section className="flex items-center justify-between rounded-lg  bg-yellow-400 py-10 shadow-md shadow-gray-400 lg:py-0">
       <div className="space-y-5 px-10 ">
         <h1 className="max-w-xl font-serif text-6xl">
           This is the{' '}
