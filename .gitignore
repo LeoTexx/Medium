@@ -12,6 +12,10 @@
 /.next/
 /out/
 
+# medium
+
+/medium/node_modules
+
 # production
 /build
 
@@ -36,3 +40,4 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
