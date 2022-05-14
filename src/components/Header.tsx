@@ -6,7 +6,7 @@ export function Header() {
       <div className="flex items-center space-x-5">
         <Link href="/">
           <img
-            src="logo.png"
+            src="/logo.png"
             alt="Medium Logo"
             className="w-44 cursor-pointer object-contain"
           />

@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
 import PortableText from 'react-portable-text'
+import toast from 'react-hot-toast'
 
 import { sanityClient, urlFor } from '../../services/sanity'
 import { Post, Comment } from '../../@types'
@@ -28,20 +29,25 @@ const Post = ({ post }: Props) => {
   } = useForm<IFormInput>()
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    console.log(data)
-
-    await fetch('/api/createComment', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    })
-      .then(() => {
-        console.log(data)
-        setSubmitted(true)
+    try {
+      await fetch('/api/createComment', {
+        method: 'POST',
+        body: JSON.stringify(data),
       })
-      .catch((err) => {
-        console.log(err)
-        setSubmitted(false)
+      toast.success('Your comment has been submitted successfully.', {
+        duration: 4000,
+        icon: '✅ ',
       })
+      setSubmitted(true)
+    } catch (error: any) {
+      console.log(error)
+      toast.success(
+        error.message ||
+          'An error occurred while creating your comment, please try again later.',
+        { duration: 4000, icon: '❌' }
+      )
+      setSubmitted(false)
+    }
   }
   return (
     <>
@@ -78,7 +84,7 @@ const Post = ({ post }: Props) => {
           <div className="mt-10">
             <PortableText
               dataset={process.env.NEXT_PUBLIC_SANITY_DATASET}
-              projectId={process.env.NEXT_PUBLIC_SANITY_PROJECTID}
+              projectId={process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}
               content={post.body}
               serializers={{
                 h1: (props: any) => (
@@ -104,7 +110,7 @@ const Post = ({ post }: Props) => {
 
         {submitted ? (
           <div className="my-10 mx-auto flex max-w-2xl flex-col bg-yellow-500 p-10 text-white">
-            <h3>Thankyou for submitting your comment</h3>
+            <h3>Thank You for submitting your comment</h3>
             <p>Once it has been approved, it will appear below! </p>
           </div>
         ) : (
@@ -128,7 +134,7 @@ const Post = ({ post }: Props) => {
               <input
                 {...register('name', { required: true })}
                 className="form-input mt-1 block w-full rounded border py-2 px-3 shadow outline-none ring-yellow-500 focus:ring"
-                placeholder="name"
+                placeholder="Your Name"
                 type="text"
               />
             </label>
@@ -137,7 +143,7 @@ const Post = ({ post }: Props) => {
               <input
                 {...register('email', { required: true })}
                 className="form-input mt-1 block w-full rounded border py-2 px-3 shadow outline-none ring-yellow-500 focus:ring"
-                placeholder="email"
+                placeholder="Your Email Address"
                 type="email"
               />
             </label>
@@ -146,7 +152,7 @@ const Post = ({ post }: Props) => {
               <textarea
                 {...register('comment', { required: true })}
                 className="form-textarea mt-1 block w-full rounded border py-2 px-3 shadow outline-none ring-yellow-500 focus:ring"
-                placeholder="comment"
+                placeholder="What do you want to tell me?"
                 rows={8}
               />
             </label>
@@ -221,7 +227,6 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  console.log(params?.slug)
   const query = `*[_type == "post" && slug.current == $slug][0] {
   _id,
   _createdAt,
